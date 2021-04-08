@@ -1,0 +1,19 @@
+{
+  "name": "project-1",
+  "version": "1.0.0",
+  "description": "Expense Tracker With Mern",
+  "main": "server.js",
+  "proxy": "http://localhost:5000",
+  "scripts": {
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+  },
+  "author": "Timothy Attah",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "path": "^0.12.7"
+  }
+}
