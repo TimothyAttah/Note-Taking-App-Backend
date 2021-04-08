@@ -19,7 +19,6 @@ if ( process.env.NODE_ENV === 'production' ) {
   })
 }
 
-console.log(`Current directory is: ${__dirname}`)
 
 const PORT = process.env.PORT || 5000;
 
