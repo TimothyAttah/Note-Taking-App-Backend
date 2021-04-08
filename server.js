@@ -8,7 +8,7 @@ app.use( express.json() )
 app.use( cors() )
 
 app.get( '/', ( req, res ) => {
-  res.send('This is Expense tracker app')
+  res.send('This is a note taking app')
 } )
 
 if ( process.env.NODE_ENV === 'production' ) {
