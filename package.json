@@ -4,6 +4,9 @@
   "description": "Expense Tracker With Mern",
   "main": "server.js",
   "proxy": "http://localhost:5000",
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
     "start": "node server.js",
     "server": "nodemon server.js",
