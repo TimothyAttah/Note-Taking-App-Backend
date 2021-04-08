@@ -7,9 +7,9 @@ const app = express()
 app.use( express.json() )
 app.use( cors() )
 
-app.get( '/', ( req, res ) => {
-  res.send('This is Expense tracker app')
-} )
+// app.get( '/', ( req, res ) => {
+//   res.send('This is Expense tracker app')
+// } )
 
 if ( process.env.NODE_ENV === 'production' ) {
   app.use( express.static( 'client/build' ) )
