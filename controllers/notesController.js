@@ -20,4 +20,15 @@ const createNote = async ( req, res ) => {
   }
 }
 
+const allNotes = async ( req, res ) => {
+  try {
+    const note = await Notes.find()
+    .populate('postedBy', '-password')
+    res.status( 200 ).json( note );
+  } catch (error) {
+     res.status( 500 ).json( { error: error.message } );
+  }
+}
+
 module.exports.createNote = createNote;
+module.exports.allNotes = allNotes;
