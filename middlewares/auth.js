@@ -1,5 +1,6 @@
 const mongoose = require( 'mongoose' );
 const jwt = require( 'jsonwebtoken' );
+const keys = require( '../config/keys' );
 
 const User = mongoose.model( 'User' );
 
@@ -8,7 +9,7 @@ const auth = ( req, res, next ) => {
   if ( !authorization )
     return res.status( 404 ).json( { error: 'Unauthorized User. Permission Denied' } );
   const token = authorization.replace( 'Bearer ', '' );
-  jwt.verify( token, process.env.JWT_SECRET, async ( err, payload ) => {
+  jwt.verify( token, keys.jwtSecret, async ( err, payload ) => {
     if ( err )
       return res.status( 404 ).json( { error: 'Unauthorized User. Request Denied' } );
     const { _id } = payload;
