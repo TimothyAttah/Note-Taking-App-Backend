@@ -42,5 +42,15 @@ const signinUser = async ( req, res ) => {
   }
 }
 
+const users = async ( req, res ) => {
+  try {
+    const savedUsers = await User.find();
+    res.status(200).json({message: 'All users', savedUsers})
+  } catch (error) {
+    res.status(500).json({error: error.message})
+  }
+}
+
 module.exports.signupUser = signupUser;
 module.exports.signinUser = signinUser;
+module.exports.users = users;
