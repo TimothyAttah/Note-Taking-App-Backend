@@ -1,11 +1,16 @@
 const express = require( 'express' );
 const cors = require( 'cors' );
+require('dotenv').config({path: './config/.env'})
 const path = require( 'path' );
 
-const app = express()
+const app = express();
+
+const mongoDB = require( './config/db' );
 
 app.use( express.json() )
 app.use( cors() )
+
+mongoDB()
 
 app.get( '/', ( req, res ) => {
   res.send('This is a note taking app. I hope you like it')
