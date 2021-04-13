@@ -5,6 +5,7 @@ const cors = require( 'cors' );
 const path = require( 'path' );
 
 require( './models/Usermodel' );
+require( './models/NotesModel' );
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use( cors() );
 
 
 app.use( '/api/user', require( './routes/authRoutes' ) );
+app.use( '/api/notes', require( './routes/notesRoutes' ) );
 
 if ( process.env.NODE_ENV === 'production' ) {
   app.use( express.static( 'client/build' ) )
