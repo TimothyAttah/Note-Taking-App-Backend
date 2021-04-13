@@ -36,7 +36,7 @@ const signinUser = async ( req, res ) => {
   if ( !userPassword ) return res.status( 404 ).json( { error: 'Incorrect password. Please try again' } );
   try {
     const token = jwt.sign( { _id: users._id }, process.env.JWT_SECRET );
-    res.status(200).json({message: 'User successfully signed in.', token, users})
+    res.status( 200 ).json( { message: 'User successfully signed in.', token, users } );
   } catch (error) {
     res.status( 500 ).json( { error: error.message } );
   }
@@ -45,12 +45,21 @@ const signinUser = async ( req, res ) => {
 const users = async ( req, res ) => {
   try {
     const savedUsers = await User.find();
-    res.status(200).json({message: 'All users', savedUsers})
+    res.status( 200 ).json( { message: 'All users', savedUsers } );
   } catch (error) {
-    res.status(500).json({error: error.message})
+    res.status( 500 ).json( { error: error.message } );
+  }
+}
+
+const protected = async ( req, res ) => {
+  try {
+    res.send('I am a protected page!!!')
+  } catch (error) {
+    res.status( 500 ).json( { error: error.message } );
   }
 }
 
 module.exports.signupUser = signupUser;
 module.exports.signinUser = signinUser;
 module.exports.users = users;
+module.exports.protected = protected;
