@@ -1,20 +1,21 @@
+const dotenv = require( 'dotenv' );
+dotenv.config( { path: './config/.env' } );
 const express = require( 'express' );
 const cors = require( 'cors' );
-require('dotenv').config({path: './config/.env'})
 const path = require( 'path' );
+
+require( './models/Usermodel' );
 
 const app = express();
 
 const mongoDB = require( './config/db' );
+mongoDB();
 
-app.use( express.json() )
-app.use( cors() )
+app.use( express.json() );
+app.use( cors() );
 
-mongoDB()
 
-app.get( '/', ( req, res ) => {
-  res.send('This is a note taking app. I hope you like it')
-} )
+app.use( '/api/user', require( './routes/authRoutes' ) );
 
 if ( process.env.NODE_ENV === 'production' ) {
   app.use( express.static( 'client/build' ) )
