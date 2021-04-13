@@ -5,6 +5,7 @@ const cors = require( 'cors' );
 const path = require( 'path' );
 
 require( './models/Usermodel' );
+require( './models/NotesModel' );
 
 const app = express();
 
