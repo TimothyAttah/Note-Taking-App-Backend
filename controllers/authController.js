@@ -5,7 +5,8 @@ const User = mongoose.model( 'User' );
 const keys = require( '../config/keys' );
 
 const signupUser = async ( req, res ) => {
-  const { firstName, lastName, email, password } = req.body;
+  const userData = req.body;
+  const { firstName, lastName, email, password } = userData;
   if ( !firstName || !lastName || !email || !password )
     return res.status( 404 ).json( { error: 'Please fill in all fields' } );
   const users = await User.findOne( { email } )
@@ -28,7 +29,8 @@ const signupUser = async ( req, res ) => {
 }
 
 const signinUser = async ( req, res ) => {
-  const { email, password } = req.body;
+  const userData = req.body;
+  const { email, password } = userData;
   if ( !email || !password )
     return res.status( 404 ).json( { error: 'Please enter your email or password' } );
   const users = await User.findOne( { email } );
@@ -37,7 +39,20 @@ const signinUser = async ( req, res ) => {
   if ( !userPassword ) return res.status( 404 ).json( { error: 'Incorrect password. Please try again' } );
   try {
     const token = jwt.sign( { _id: users._id }, keys.jwtSecret );
-    res.status( 200 ).json( { message: 'User successfully signed in.', token, users } );
+    const {_id, createdAt, firstName, lastName, email } = users
+    const fullName = { firstName, lastName };
+    res.status( 200 ).json( {
+      message: 'User successfully signed in.',
+      token,
+      users: {
+        _id,
+        createdAt,
+        firstName,
+        lastName,
+        email,
+        fullName
+      }
+    } );
   } catch (error) {
     res.status( 500 ).json( { error: error.message } );
   }
