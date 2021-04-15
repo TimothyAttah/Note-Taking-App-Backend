@@ -55,27 +55,40 @@ const editNote = async ( req, res ) => {
 
 module.exports.likeNote = async ( req, res ) => {
   try {
-    if ( !req.body.noteId )
-      return res.status(404).json({error: 'Cannot like note. Try again'})
-    const likedNote = await Notes.findByIdAndUpdate( req.body.noteId, {
-      $push: { likes: req.user._id }
-    }, { new: true } )
-    res.status(200).json({message: 'You like this note', likedNote})
+    await Notes.findByIdAndUpdate( req.body.noteId, {
+      $push: {likes: req.user._id}
+    }, {
+      new: true
+    } ).populate('postedBy', '-password').exec( ( err, result ) => {
+      if ( err ) {
+        return res.status(404).json({error: err.message})
+      }else {
+      return res.status(200).json({message: 'You like this note', result})
+    }
+    } )
   } catch (error) {
      res.status( 500 ).json( { error: error.message } );
   }
 }
 
-module.exports.unLikeNote = async ( req, res ) => {
+module.exports.unlikeNote = async ( req, res ) => {
   try {
-    const unLikedNote = await Notes.findByIdAndUpdate( req.body.noteId, {
-      $pull: { likes: req.user._id }
-    }, { new: true } )
-    res.status(200).json({message: 'You like this note', unLikedNote})
+    await Notes.findByIdAndUpdate( req.body.noteId, {
+      $pull: {likes: req.user._id}
+    }, {
+      new: true
+    } ).exec( ( err, result ) => {
+      if ( err ) {
+        return res.status(404).json({error: err.message})
+      }else {
+      return res.status(200).json({message: 'You unlike this note', result})
+    }
+    } )
   } catch (error) {
      res.status( 500 ).json( { error: error.message } );
   }
 }
+
 
 module.exports.allNotes = allNotes;
 module.exports.myNotes = myNotes;
