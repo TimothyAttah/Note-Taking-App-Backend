@@ -1,7 +1,7 @@
 const mongoose = require( 'mongoose' );
 const Notes = mongoose.model( 'Notes' );
 
-const createNote = async ( req, res ) => {
+module.exports.createNote = async ( req, res ) => {
   const notesData = req.body;
   const { title, content } = notesData;
   if ( !title || !content )
@@ -66,7 +66,17 @@ module.exports.likeNote = async ( req, res ) => {
   }
 }
 
-module.exports.createNote = createNote;
+module.exports.unLikeNote = async ( req, res ) => {
+  try {
+    const unLikedNote = await Notes.findByIdAndUpdate( req.body.noteId, {
+      $pull: { likes: req.user._id }
+    }, { new: true } )
+    res.status(200).json({message: 'You like this note', unLikedNote})
+  } catch (error) {
+     res.status( 500 ).json( { error: error.message } );
+  }
+}
+
 module.exports.allNotes = allNotes;
 module.exports.myNotes = myNotes;
 module.exports.editNote = editNote;
