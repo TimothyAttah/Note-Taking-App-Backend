@@ -89,6 +89,28 @@ module.exports.unlikeNote = async ( req, res ) => {
   }
 }
 
+module.exports.commentsNote = async ( req, res ) => {
+  const comment = {
+    text: req.body.text,
+    postedBy: req.user._id
+  }
+  try {
+    await Notes.findByIdAndUpdate( req.body.noteId, {
+      $push: {comments: comment}
+    }, {
+      new: true
+    } ).populate('comments.postedBy', 'postedBy', '-password').exec( ( err, result ) => {
+      if ( err ) {
+        return res.status(404).json({error: err.message})
+      }else {
+      return res.status(200).json({message: 'You like this note', result})
+    }
+    } )
+  } catch (error) {
+     res.status( 500 ).json( { error: error.message } );
+  }
+}
+
 
 module.exports.allNotes = allNotes;
 module.exports.myNotes = myNotes;
