@@ -53,6 +53,19 @@ const editNote = async ( req, res ) => {
   }
 }
 
+module.exports.likeNote = async ( req, res ) => {
+  try {
+    if ( !req.body.noteId )
+      return res.status(404).json({error: 'Cannot like note. Try again'})
+    const likedNote = await Notes.findByIdAndUpdate( req.body.noteId, {
+      $push: { likes: req.user._id }
+    }, { new: true } )
+    res.status(200).json({message: 'You like this note', likedNote})
+  } catch (error) {
+     res.status( 500 ).json( { error: error.message } );
+  }
+}
+
 module.exports.createNote = createNote;
 module.exports.allNotes = allNotes;
 module.exports.myNotes = myNotes;
