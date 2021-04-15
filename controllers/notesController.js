@@ -23,7 +23,8 @@ module.exports.createNote = async ( req, res ) => {
 const allNotes = async ( req, res ) => {
   try {
     const note = await Notes.find()
-    .populate('postedBy', '-password')
+      .populate( 'postedBy', '-password' )
+    .populate( 'comments.postedBy', '_id firstName lastName' )
     res.status( 200 ).json( note );
   } catch (error) {
      res.status( 500 ).json( { error: error.message } );
@@ -99,11 +100,14 @@ module.exports.commentsNote = async ( req, res ) => {
       $push: {comments: comment}
     }, {
       new: true
-    } ).populate('comments.postedBy', 'postedBy', '-password').exec( ( err, result ) => {
+    } )
+      .populate( 'comments.postedBy', '_id firstName lastName' )
+      .populate('postedBy', '-password')
+      .exec( ( err, result ) => {
       if ( err ) {
         return res.status(404).json({error: err.message})
       }else {
-      return res.status(200).json({message: 'You like this note', result})
+      return res.status(200).json({message: 'You comment this note', result})
     }
     } )
   } catch (error) {
