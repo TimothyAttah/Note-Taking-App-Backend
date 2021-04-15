@@ -23,7 +23,8 @@ module.exports.createNote = async ( req, res ) => {
 const allNotes = async ( req, res ) => {
   try {
     const note = await Notes.find()
-    .populate('postedBy', '-password')
+      .populate( 'postedBy', '-password' )
+    .populate( 'comments.postedBy', '_id firstName lastName' )
     res.status( 200 ).json( note );
   } catch (error) {
      res.status( 500 ).json( { error: error.message } );
@@ -82,6 +83,31 @@ module.exports.unlikeNote = async ( req, res ) => {
         return res.status(404).json({error: err.message})
       }else {
       return res.status(200).json({message: 'You unlike this note', result})
+    }
+    } )
+  } catch (error) {
+     res.status( 500 ).json( { error: error.message } );
+  }
+}
+
+module.exports.commentsNote = async ( req, res ) => {
+  const comment = {
+    text: req.body.text,
+    postedBy: req.user._id
+  }
+  try {
+    await Notes.findByIdAndUpdate( req.body.noteId, {
+      $push: {comments: comment}
+    }, {
+      new: true
+    } )
+      .populate( 'comments.postedBy', '_id firstName lastName' )
+      .populate('postedBy', '-password')
+      .exec( ( err, result ) => {
+      if ( err ) {
+        return res.status(404).json({error: err.message})
+      }else {
+      return res.status(200).json({message: 'You comment this note', result})
     }
     } )
   } catch (error) {
