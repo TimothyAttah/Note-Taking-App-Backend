@@ -115,6 +115,24 @@ module.exports.commentsNote = async ( req, res ) => {
   }
 }
 
+module.exports.deleteNote = async ( req, res ) => {
+  try {
+    await Notes.findOne( { _id: req.params.noteId } )
+      .populate( 'postedBy', '_id' )
+      .exec(async ( err, post ) => {
+        if ( err, !post ) {
+       return res.status(404).json({error: err.message})
+        }
+        if ( post.postedBy._id.toString() === req.user._id.toString() ) {
+          const deletedNote = await post.remove()
+          return res.status(200).json({message: 'Note deleted successfully', deletedNote})
+        }
+    })
+  } catch (error) {
+    res.status( 500 ).json( { error: error.message } );
+  }
+}
+
 
 module.exports.allNotes = allNotes;
 module.exports.myNotes = myNotes;
