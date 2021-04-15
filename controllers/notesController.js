@@ -121,7 +121,7 @@ module.exports.deleteNote = async ( req, res ) => {
       .populate( 'postedBy', '_id' )
       .exec(async ( err, post ) => {
         if ( err, !post ) {
-       return res.status(404).json({error: err.message})
+          return res.status( 404 ).json( { error: err.message } );
         }
         if ( post.postedBy._id.toString() === req.user._id.toString() ) {
           const deletedNote = await post.remove()
