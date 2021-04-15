@@ -77,7 +77,7 @@ module.exports.unlikeNote = async ( req, res ) => {
       $pull: {likes: req.user._id}
     }, {
       new: true
-    } ).exec( ( err, result ) => {
+    } ).populate('postedBy', '-password').exec( ( err, result ) => {
       if ( err ) {
         return res.status(404).json({error: err.message})
       }else {
