@@ -39,6 +39,24 @@ module.exports.followUsers = async ( req, res ) => {
      return res.status( 500 ).json( { error: error.message } );
   }
 }
+module.exports.unFollowUsers = async ( req, res ) => {
+  try {
+    User.findByIdAndUpdate( req.body.unfollowId, {
+     $pull:{followers:req.user._id}
+    }, { new: true }, ( err, result ) => {
+      if ( err ) {
+        return res.status( 404 ).json( { error: err.message } );
+      }
+      User.findByIdAndUpdate( req.user._id, {
+        $pull: {following: req.body.unfollowId}
+      }, { new: true } ).select( '-password' ).then( result => {
+          res.status(200).json({message: 'You are unFollowing', result})
+      })  
+   })
+  } catch (error) {
+     return res.status( 500 ).json( { error: error.message } );
+  }
+}
 // module.exports.followUsers = async ( req, res ) => {
 //   try {
 //     await User.findByIdAndUpdate( req.body.followId, {
@@ -58,19 +76,19 @@ module.exports.followUsers = async ( req, res ) => {
 //   }
 // }
 
-module.exports.unFollowUsers = async ( req, res ) => {
-  try {
-    await User.findByIdAndUpdate( req.body.unfollowId, {
-      $pull:{followers:req.user._id}
-    }, { new: true }, ( async ( err, result ) => {
-      if ( err )
-        return res.status( 404 ).json( { error: err.message } )
-      await User.findByIdAndUpdate( req.user._id, {
-       $push: {following: req.body.unfollowId}
-      }, { new: true } )
-      res.status(200).json({message: 'You are unfollowing', result})
-    }))
-  } catch (error) {
-     return res.status( 500 ).json( { error: error.message } );
-  }
-}
+// module.exports.unFollowUsers = async ( req, res ) => {
+//   try {
+//     await User.findByIdAndUpdate( req.body.unfollowId, {
+//       $pull:{followers:req.user._id}
+//     }, { new: true }, ( async ( err, result ) => {
+//       if ( err )
+//         return res.status( 404 ).json( { error: err.message } )
+//       await User.findByIdAndUpdate( req.user._id, {
+//        $push: {following: req.body.unfollowId}
+//       }, { new: true } )
+//       res.status(200).json({message: 'You are unfollowing', result})
+//     }))
+//   } catch (error) {
+//      return res.status( 500 ).json( { error: error.message } );
+//   }
+// }
