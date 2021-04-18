@@ -17,3 +17,6 @@ const mongoDB = async () => {
 }
 
 module.exports = mongoDB;
+
+// MONGO_URL = mongodb+srv://Note-dev:notes123@cluster0.zyzqe.mongodb.net/Note3Sixty?retryWrites=true&w=majority
+// JWT_SECRET = nejnfjwebjbdjcaawbeihfvweydvh@tyftyfwd9wmjwhuefd!nhbhjv
