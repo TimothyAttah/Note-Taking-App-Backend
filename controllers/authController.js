@@ -39,19 +39,12 @@ const signinUser = async ( req, res ) => {
   if ( !userPassword ) return res.status( 404 ).json( { error: 'Incorrect password. Please try again' } );
   try {
     const token = jwt.sign( { _id: users._id }, keys.jwtSecret );
-    const {_id, createdAt, firstName, lastName, email } = users
-    const fullName = { firstName, lastName };
+    users.password = undefined;
+    // const {_id, createdAt, firstName, lastName, email } = users
     res.status( 200 ).json( {
       message: 'User successfully signed in.',
       token,
-      users: {
-        _id,
-        createdAt,
-        firstName,
-        lastName,
-        email,
-        fullName
-      }
+      users
     } );
   } catch (error) {
     res.status( 500 ).json( { error: error.message } );
