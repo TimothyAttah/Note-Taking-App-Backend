@@ -18,9 +18,9 @@ app.use( express.json() );
 app.use( cors() );
 
 
-app.use( 'https://notes-taking-app-front-end.herokuapp.com/api/user', require( './routes/authRoutes' ) );
-app.use( 'https://notes-taking-app-front-end.herokuapp.com/api/notes', require( './routes/notesRoutes' ) );
-app.use( 'https://notes-taking-app-front-end.herokuapp.com/api/auth/user', require( './routes/userRoutes' ) );
+app.use( '/api/user', require( './routes/authRoutes' ) );
+app.use( '/api/notes', require( './routes/notesRoutes' ) );
+app.use( '/api/auth/user', require( './routes/userRoutes' ) );
 
 //  app.get( '/', ( req, res ) => {
 //     res.send('Hello world')
